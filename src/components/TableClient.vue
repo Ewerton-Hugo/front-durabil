@@ -1,0 +1,178 @@
+
+<script setup></script>
+
+<template>
+    <div>
+      <v-text-field v-model="searchQuery" label="Pesquisar" @input="saveSearchQuery" />
+    </div>
+    <!-- <input type="text" /> -->
+  <v-table density="default">
+    <thead>
+      <tr>
+        <th>
+          ID
+        </th>
+        <th>
+          Descrição
+        </th>
+        <th>
+          Area
+        </th>
+        <th>
+          Tipo
+        </th>
+        <th>Ações</th>
+        <div @click="redirectToRegister" class="btn">
+          <v-btn variant="tonal"> + </v-btn>
+        </div>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="item in filteredPrediosAmbientes" :key="item.id">
+        <td>{{ item.id }}</td>
+        <td>{{ item.descricao }}</td>
+        <td>{{ item.predios_areas ? item.predios_areas.descricao : "N/A" }}</td>
+
+        <td>
+          {{ item.tabelas_valores ? item.tabelas_valores.descricao : "N/A" }}
+        </td>
+        <td class="custom-td">
+          <div class="btn-pointer" @click="redirectToView(item.id)">
+            <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
+          </div>
+          <div class="btn-pointer" @click="redirectToUpdate(item.id)">
+            <font-awesome-icon :icon="['fas', 'pen-to-square']" />
+          </div>
+          <div class="btn-pointer" id="exclusão">
+            <font-awesome-icon
+              :icon="['fass', 'trash']"
+              @click="toggleExclusion(item)"
+              :class="{
+                'red-icon': item.excluido,
+                'gray-icon': !item.excluido,
+              }"
+            />
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </v-table>
+</template>
+<script>
+import axios from "axios";
+export default {
+  data() {
+    return {
+      predios_ambientes: [],
+      searchQuery: "",
+    };
+  },
+  computed: {
+    filteredPrediosAmbientes() {
+      const query = this.searchQuery.toLowerCase().trim();
+
+      const filteredItems = this.predios_ambientes.filter((item) => {
+        const descricao = item.descricao.toLowerCase();
+        const prediosAreasDescricao = item.predios_areas
+          ? item.predios_areas.descricao.toLowerCase()
+          : "";
+
+        return (
+          descricao.includes(query) || prediosAreasDescricao.includes(query)
+        );
+      });
+
+      // Ordena os itens pelo nome da descrição
+      return filteredItems.sort((a, b) => a.descricao.localeCompare(b.descricao));
+    },
+  },
+  methods: {
+    redirectToView(id) {
+      this.$router.push({
+        name:"View",
+        query: {
+          id,
+        },
+      });
+    },
+    redirectToRegister() {
+      this.$router.push("/Register");
+    },
+    redirectToUpdate(id) {
+      this.$router.push({
+        name: "Update",
+        query:{
+          id,
+        }
+       });
+    },
+    async toggleExclusion(item) {
+      try {
+        item.excluido = !item.excluido;
+        await axios.put(`http://localhost:3000/PrediosAmbiente/excluir/${item.id}`,{
+          excluido:item.excluido
+        })
+        console.log(item.excluido)
+      } catch (error) {
+        console.error("Erro ao atualizar exclusão:", error);
+        item.excluido = !item.excluido;
+      }
+    },
+    saveSearchQuery() {
+
+        // Salva o valor do campo de pesquisa no localStorage
+        localStorage.setItem("searchQuery", this.searchQuery);
+        const searchQuery = localStorage.getItem("searchQuery");
+        console.log("saveSearchQuery:", searchQuery); // Imprime no console
+      },
+  },
+
+
+  mounted() {
+    axios
+      .get("http://localhost:3000/PrediosAmbiente")
+      .then((response) => {
+        this.predios_ambientes = response.data;
+        console.log(this.predios_ambientes)
+      })
+      .catch((error) => {
+        console.error("Erro na chamada de API:", error);
+      });
+
+
+        // Recarrega o valor do campo de pesquisa do localStorage
+    const searchQuery = localStorage.getItem("searchQuery");
+    console.log("Valor carregado do localStorage:", searchQuery); // Imprime no console
+    this.searchQuery = searchQuery || "";
+  },
+};
+</script>
+
+<style scoped>
+.container {
+  margin-right: 10px;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.custom-td {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.btn-pointer{
+  cursor: pointer;
+}
+
+.red-icon {
+  color: red;
+}
+
+.gray-icon {
+  color: gray;
+}
+</style>
