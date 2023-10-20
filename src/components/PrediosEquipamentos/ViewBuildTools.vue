@@ -22,33 +22,54 @@
 
         <v-col>
           <v-sheet class="pa-2 ma-2">
-            Tipo: {{ dados.tabelas_valores.descricao }}
+            Codigo: {{ dados.codigo }}
           </v-sheet>
         </v-col>
 
         <v-col>
+          <v-sheet class="pa-2 ma-2">
+            Patrimonio: {{ dados.patrimonio }}
+          </v-sheet>
+        </v-col>
+
+        <!-- <v-col>
           <v-sheet class="pa-2 ma-2"
-            >Area:
+            >Gestor:
             {{
-              dados.predio_area_id ? dados.predios_areas.descricao : "N/A"
+              dados.user_gestor
             }}</v-sheet
           >
-        </v-col>
+        </v-col> -->
 
         <v-responsive width="100%"></v-responsive>
 
         <v-col>
           <v-sheet class="pa-2 ma-2">
-            Predio_id: {{ dados.predio_id }}
+            Modelo: {{ dados.equipamentos_modelo.codigo }}
           </v-sheet>
         </v-col>
 
         <v-col>
           <v-sheet class="pa-2 ma-2">
-            Numero Ocupantes: {{ dados.numero_ocupantes }}
+            Ambiente: {{ dados.predios_ambientes.descricao }}
+          </v-sheet>
+        </v-col>
+
+        <v-col>
+          <v-sheet class="pa-2 ma-2">
+            Ano Fabricação: {{ dados.ano_fabricacao }}
+          </v-sheet>
+        </v-col>
+
+        <v-col>
+          <v-sheet class="pa-2 ma-2">
+            Data Operação: {{ dados.data_operacao }}
           </v-sheet>
         </v-col>
       </v-row>
+
+
+
     </v-container>
   </div>
 </template>
@@ -64,12 +85,12 @@ export default {
   },
   methods: {
     returnToMainPage() {
-      this.$router.push("/home");
+      this.$router.push("/tabletools");
     },
-    async loadPredios() {
+    async loadPrediosEquipamentos() {
       try {
         const response = await axios.get(
-          `http://localhost:3000/PrediosAmbiente/${this.dados.id}`
+          `http://localhost:3000/PrediosEquipamentos/${this.dados.id}`
         );
         this.dados = response.data;
       } catch (error) {
@@ -82,14 +103,14 @@ export default {
   created() {
     if (this.$route.query.id) {
       this.dados.id = this.$route.query.id;
-      this.loadPredios();
+      this.loadPrediosEquipamentos();
     } else {
       console.log("Erro em carregar dados");
     }
   },
   mounted() {
     (async () => {
-      await this.loadPredios();
+      await this.loadPrediosEquipamentos();
     })();
   },
 };

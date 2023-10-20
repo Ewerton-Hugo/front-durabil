@@ -1,16 +1,10 @@
-/**
- * main.js
- *
- * Bootstraps Vuetify and other plugins then mounts the App`
- */
-
-// Components
 
 import App from './App.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faUser,fas, faClock } from '@fortawesome/free-solid-svg-icons';
 import VueTheMask from 'vue-the-mask';
+import { VDataTable } from 'vuetify/labs/VDataTable'
 
 // Composables
 import { createApp } from 'vue'
@@ -19,8 +13,9 @@ import { createApp } from 'vue'
 import { registerPlugins } from '@/plugins'
 library.add(faUser,fas,faClock);
 const app = createApp(App)
-app.component('font-awesome-icon', FontAwesomeIcon)
+app.component('font-awesome-icon', FontAwesomeIcon,VDataTable)
 app.use(VueTheMask)
+
 
 registerPlugins(app)
 

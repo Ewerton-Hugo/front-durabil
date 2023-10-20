@@ -1,12 +1,9 @@
+
 <script setup></script>
 
 <template>
   <div>
-    <v-text-field
-      v-model="searchQuery"
-      label="Pesquisar"
-      @input="saveSearchQuery"
-    />
+    <v-text-field v-model="searchQuery" label="Pesquisar" @input="saveSearchQuery"/>
   </div>
   <div @click="redirectToRegister" class="btn">
     <v-btn variant="tonal"> Criar </v-btn>
@@ -14,12 +11,12 @@
   <v-data-table
     :headers="headers"
     :search="searchQuery"
-    :items="filteredPrediosAmbientes"
+    :items="filteredPrediosEquipamentos"
     :rows-per-page-items="itemsPerPage"
     :footer-props="footerProps"
     density="default"
   >
-    <!-- eslint-disable vue/valid-v-slot -->
+  <!-- eslint-disable vue/valid-v-slot -->
     <template v-slot:item.actions="{ item }">
       <div class="custom-td">
         <div class="btn-pointer" @click="redirectToView(item.id)">
@@ -41,13 +38,8 @@
       </div>
     </template>
   </v-data-table>
-  <div class="allignButtons">
-    <div @click="redirectToBuildToolsTable" class="btn">
-      <v-btn variant="tonal"> Ferramentas </v-btn>
-    </div>
-    <div @click="redirectToTestTable" class="btn">
-      <v-btn variant="tonal"> Predio Teste </v-btn>
-    </div>
+  <div @click="returnToMainPage" class="btn">
+    <v-btn variant="tonal">Retornar </v-btn>
   </div>
 </template>
 <script>
@@ -59,7 +51,7 @@ export default {
   },
   data() {
     return {
-      predios_ambientes: [],
+      predios_equipamentos: [],
       searchQuery: "",
       itemsPerPage: [20],
       footerProps: [20],
@@ -69,16 +61,24 @@ export default {
           value: "id",
         },
         {
+          title: "Codigo",
+          value: "codigo",
+        },
+        {
+          title: "Patrimonio",
+          value: "patrimonio",
+        },
+        {
           title: "Descrição",
           value: "descricao",
         },
         {
-          title: "Area",
-          value: "predios_areas.descricao",
+          title: "Ambiente",
+          value: "predios_ambientes.descricao",
         },
         {
-          title: "Tipo",
-          value: "tabelas_valores.descricao",
+          title: "Modulo",
+          value: "equipamentos_modelo.codigo",
         },
         {
           title: "Ações",
@@ -88,10 +88,10 @@ export default {
     };
   },
   computed: {
-    filteredPrediosAmbientes() {
+    filteredPrediosEquipamentos() {
       const query = this.searchQuery.toLowerCase().trim();
 
-      const filteredItems = this.predios_ambientes.filter((item) => {
+      const filteredItems = this.predios_equipamentos.filter((item) => {
         const descricao = item.descricao.toLowerCase();
         const prediosAreasDescricao = item.predios_areas
           ? item.predios_areas.descricao.toLowerCase()
@@ -109,26 +109,23 @@ export default {
     },
   },
   methods: {
-    redirectToBuildToolsTable() {
-      this.$router.push({name:"TableTools"});
-    },
-    redirectToTestTable() {
-      this.$router.push({name:"TableTest"});
+    returnToMainPage() {
+      this.$router.push("/home");
     },
     redirectToView(id) {
       this.$router.push({
-        name: "View",
+        name: "ViewBuildTools",
         query: {
           id,
         },
       });
     },
     redirectToRegister() {
-      this.$router.push("/Register");
+      this.$router.push("/RegisterBuildTools");
     },
     redirectToUpdate(id) {
       this.$router.push({
-        name: "Update",
+        name: "UpdateBuildTools",
         query: {
           id,
         },
@@ -138,7 +135,7 @@ export default {
       try {
         item.excluido = !item.excluido;
         await axios.put(
-          `http://localhost:3000/PrediosAmbiente/excluir/${item.id}`,
+          `http://localhost:3000/PrediosEquipamentos/excluir/${item.id}`,
           {
             excluido: item.excluido,
           }
@@ -158,10 +155,10 @@ export default {
   },
   mounted() {
     axios
-      .get("http://localhost:3000/PrediosAmbiente")
+      .get("http://localhost:3000/PrediosEquipamentos")
       .then((response) => {
-        this.predios_ambientes = response.data;
-        console.log(this.predios_ambientes);
+        this.predios_equipamentos = response.data;
+        console.log(this.predios_equipamentos);
       })
       .catch((error) => {
         console.error("Erro na chamada de API:", error);
@@ -190,14 +187,10 @@ export default {
   gap: 15px;
 }
 
-.allignButtons{
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
 .btn-pointer {
   cursor: pointer;
 }
+
 .red-icon {
   color: red;
 }

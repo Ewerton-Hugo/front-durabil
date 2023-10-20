@@ -14,7 +14,26 @@ const routes = [
         path: '/home',
         name: 'Home',
         component: () => import('@/views/Home.vue'),
-        props: (route) => ({ searchQuery: route.query.searchQuery || '' }), // Passe o valor da query como uma prop
+      },
+      {
+        path: 'tabletools',
+        name: 'TableTools',
+        component: () => import('@/views/PrediosEquipamentos/TableTools.vue'),
+      },
+      {
+        path: 'registerbuildtools',
+        name: 'RegisterBuildTools',
+        component: () => import('@/views/PrediosEquipamentos/RegisterTools.vue'),
+      },
+      {
+        path: 'updatebuildtools',
+        name: 'UpdateBuildTools',
+        component: () => import('@/views/PrediosEquipamentos/UpdateTableTools.vue'),
+      },
+      {
+        path: 'viewbuildtools',
+        name: 'ViewBuildTools',
+        component: () => import('@/views/PrediosEquipamentos/ViewTableTools.vue'),
       },
       {
         path: 'register',
@@ -30,6 +49,11 @@ const routes = [
         path: 'view',
         name: 'View',
         component: () => import( '@/views/View.vue'),
+      },
+      {
+        path: 'tabletest',
+        name: 'TableTest',
+        component: () => import( '@/views/PredioTeste/TableTeste.vue'),
       },
     ],
   },

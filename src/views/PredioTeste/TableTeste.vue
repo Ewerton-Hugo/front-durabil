@@ -1,9 +1,9 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 // eslint-disable-next-line vue/multi-word-component-names
 <template>
-  <RegisterClient/>
+  <TableTeste />
 </template>
 
 <script setup>
-  import RegisterClient from '@/components/RegisterClient.vue'
+  import TableTeste from '@/components/FuncaoBanco/BuildTestTable.vue'
 </script>
