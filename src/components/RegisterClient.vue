@@ -81,7 +81,6 @@ export default {
     },
     async filterTipos(searchText) {
       try {
-        const response = await axios.get("http://localhost:3000/PrediosAreas");
         this.tipos = response.data.filter((tipo) =>
           tipo.descricao.toLowerCase().includes(searchText.toLowerCase())
         );
@@ -91,7 +90,7 @@ export default {
     },
     async filterAreas(searchText) {
       try {
-        const response = await axios.get("http://localhost:3000/PrediosAreas");
+        const response = await axios.get("https://basck-durabil2.onrender.com/PrediosAreas");
         this.areas = response.data.filter((area) =>
           area.descricao.toLowerCase().includes(searchText.toLowerCase())
         );
@@ -101,7 +100,7 @@ export default {
     },
     async loadTipos() {
       try {
-        const response = await axios.get("http://localhost:3000/TabValores");
+        const response = await axios.get("https://basck-durabil2.onrender.com/TabValores");
         this.tipos = response.data.map((tipo) => ({
           descricao: tipo.descricao,
           id: tipo.id,
@@ -113,7 +112,7 @@ export default {
     },
     async loadAreas() {
       try {
-        const response = await axios.get("http://localhost:3000/PrediosAreas");
+        const response = await axios.get("https://basck-durabil2.onrender.com/PrediosAreas");
         this.areas = response.data.map((area) => ({
           descricao: area.descricao,
           id: area.id,
@@ -133,7 +132,7 @@ export default {
 
       try {
         const response = await axios.post(
-          "http://localhost:3000/PrediosAmbiente",
+          "https://basck-durabil2.onrender.com/PrediosAmbiente",
           data
         );
         this.$router.push("/home"); // Redirecione para a página principal ou faça qualquer outra ação desejada

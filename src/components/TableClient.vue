@@ -138,7 +138,7 @@ export default {
       try {
         item.excluido = !item.excluido;
         await axios.put(
-          `http://localhost:3000/PrediosAmbiente/excluir/${item.id}`,
+          `https://basck-durabil2.onrender.com/PrediosAmbiente/excluir/${item.id}`,
           {
             excluido: item.excluido,
           }
@@ -158,7 +158,7 @@ export default {
   },
   mounted() {
     axios
-      .get("http://localhost:3000/PrediosAmbiente")
+      .get("https://basck-durabil2.onrender.com/PrediosAmbiente")
       .then((response) => {
         this.predios_ambientes = response.data;
         console.log(this.predios_ambientes);
