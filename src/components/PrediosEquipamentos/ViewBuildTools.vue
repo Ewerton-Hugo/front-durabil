@@ -90,7 +90,7 @@ export default {
     async loadPrediosEquipamentos() {
       try {
         const response = await axios.get(
-          `http://localhost:3000/PrediosEquipamentos/${this.dados.id}`
+          `https://basck-durabil2.onrender.com/PrediosEquipamentos/${this.dados.id}`
         );
         this.dados = response.data;
       } catch (error) {
